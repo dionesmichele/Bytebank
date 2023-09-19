@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +14,8 @@ public class Menu {
         List<Conta> contas = new ArrayList<>();
         int opcao;
         boolean sair = false;
+
+        int tipoContaEscolhida = 0;
 
         while (!sair) {
             //fazer um nv while sair aqui?
@@ -28,7 +31,7 @@ public class Menu {
                         System.out.println("QUAL TIPO DE CONTA DESEJA CADASTRAR: ");
                         System.out.println("1 - CONTA CORRENTE");
                         System.out.println("2 - CONTA POUPANÇA");//opção voltar?
-                        int tipoConta = Integer.parseInt(br.readLine());
+                        tipoContaEscolhida = Integer.parseInt(br.readLine());
 
                         System.out.println("INFORME O NOME DO TITULAR DA CONTA:   ");
                         String nome = br.readLine();
@@ -46,6 +49,7 @@ public class Menu {
                         System.out.println("CADASTRE UMA SENHA DE 6 DÍGITOS (APENAS NÚMEROS): ");
                         int senha = Integer.parseInt(br.readLine());
 
+                        int tipoConta = 0;
                         if (tipoConta == 1) {
                             System.out.println("CADASTRE UMA CHAVE PIX:  ");
                             String chavePix = br.readLine();
@@ -71,14 +75,13 @@ public class Menu {
                         Conta contaAcessada = null;
 
                         for (Conta conta : contas) {
-                            if (conta.validarCredenciais(buscaAgencia, buscaConta, buscaSenha) && conta instanceof ContaPoupanca) {
+                            if (conta.validarCredenciais(buscaAgencia, buscaConta, String.valueOf(buscaSenha))) {
                                 contaAcessada = conta;
                                 break;
                             }
                         }
                         if (contaAcessada != null) {
-                            String idConta = contaAcessada.getTipoConta();
-                            if ("Conta Corrente".equals(idConta)) {git
+                            if (tipoContaEscolhida == 1){
                                 System.out.println("Bem-vindo à Conta Corrente!");
 
                                 boolean sairCC = false;
@@ -126,7 +129,7 @@ public class Menu {
                                             System.out.println("Opção inválida, escolha novamente!");
                                     }
                                 }
-                            } else if ("Conta Poupança".equals(idConta)) {
+                            } else if (tipoContaEscolhida == 2) {
                                 System.out.println("Bem-vindo à Conta Poupança!");
 
                                 boolean sairCP = false;
@@ -149,8 +152,8 @@ public class Menu {
                                             System.out.println("Rendimento aplicado na Conta Poupança. Novo saldo: R$ " + contaAcessada.getSaldo());
                                             break;
                                         case 3:
-                                            // Resgatar Valor Aplicado
-                                            // Implemente a lógica para resgatar o valor aplicado
+                                            contaAcessada.resgatarRendimento();
+                                            System.out.println("Valor aplicado resgatado com sucesso! Novo saldo: R$ " + contaAcessada.getSaldo());
                                             break;
                                         case 4:
                                             // Encerrar Conta
@@ -169,12 +172,13 @@ public class Menu {
 
                         }
 
-                break;
+                    break;
 
 
                 case 3:
                     sair = true;
                     break;
+
                 default:
                     System.out.println("OPÇÃO INVÁLIDA!");
                     Thread.sleep(2000);

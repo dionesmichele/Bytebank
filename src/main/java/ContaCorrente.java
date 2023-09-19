@@ -2,13 +2,12 @@ import java.math.BigDecimal;
 
 public class ContaCorrente extends Conta {
 
-    private Pessoa titular;
+
 
     private String chavePix;
 
    public ContaCorrente(int agencia, int numeroConta, int senha, Pessoa titular, String chavePix){
        super(agencia, numeroConta, senha);
-       this.titular = titular;
        this.chavePix = chavePix;
    }
 
